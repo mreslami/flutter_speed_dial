@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/src/rtl_util.dart';
 
 import 'animated_child.dart';
 import 'animated_floating_button.dart';
@@ -80,7 +81,7 @@ class _SpeedDialState extends State<SpeedDial> with SingleTickerProviderStateMix
   AnimationController _controller;
 
   bool _open = false;
-
+  bool rtlReady;
   @override
   void initState() {
     super.initState();
@@ -166,11 +167,14 @@ class _SpeedDialState extends State<SpeedDial> with SingleTickerProviderStateMix
   }
 
   Widget _renderOverlay() {
+    var top = (rtlReady)? -16.0:0.0;
+    var left = (rtlReady)? -16.0:0.0;
     return Positioned(
+      //todo
       right: -16.0,
       bottom: -16.0,
-      top: _open ? 0.0 : null,
-      left: _open ? 0.0 : null,
+      top: _open ? top : null,
+      left: _open ? left : null,
       child: GestureDetector(
         onTap: _toggleChildren,
         child: BackgroundOverlay(
@@ -209,11 +213,13 @@ class _SpeedDialState extends State<SpeedDial> with SingleTickerProviderStateMix
 
     return Positioned(
       bottom: widget.marginBottom - 16,
-      right: widget.marginRight - 16,
+      right: widget.marginRight - ((rtlReady)? 0:16 ),
       child: Container(
         child: Column(
+
           mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
+
+          crossAxisAlignment: ((rtlReady)? CrossAxisAlignment.start:CrossAxisAlignment.end ),
           children: List.from(fabChildren)
             ..add(
               Container(
@@ -228,6 +234,7 @@ class _SpeedDialState extends State<SpeedDial> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    rtlReady = isRtl(Localizations.localeOf(context));
     final children = [
       if (!widget.closeManually) _renderOverlay(),
       _renderButton(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'rtl_util.dart';
 
 class AnimatedChild extends AnimatedWidget {
   final int index;
@@ -78,28 +79,33 @@ class AnimatedChild extends AnimatedWidget {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          buildLabel(),
-          Container(
-            width: 62.0,
-            height: animation.value,
-            padding: EdgeInsets.only(bottom: 62.0 - animation.value),
-            child: Container(
-              height: 62.0,
-              width: animation.value,
-              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: FloatingActionButton(
-                heroTag: heroTag,
-                onPressed: _performAction,
-                backgroundColor: backgroundColor,
-                foregroundColor: foregroundColor,
-                elevation: elevation ?? 6.0,
-                child: buttonChild,
-              ),
-            ),
-          )
-        ],
+        children: createButton(context, animation, buttonChild),
       ),
     );
+  }
+
+  List<Widget> createButton(
+      BuildContext context, Animation<double> animation, Widget buttonChild) {
+    var button = Container(
+      width: 62.0,
+      height: animation.value,
+      padding: EdgeInsets.only(bottom: 62.0 - animation.value),
+      child: Container(
+        height: 62.0,
+        width: animation.value,
+        padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+        child: FloatingActionButton(
+          heroTag: heroTag,
+          onPressed: _performAction,
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
+          elevation: elevation ?? 6.0,
+          child: buttonChild,
+        ),
+      ),
+    );
+    return (isRtl(Localizations.localeOf(context)))
+        ? [button, buildLabel()]
+        : [buildLabel(), button];
   }
 }

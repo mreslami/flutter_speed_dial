@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyApp(), title: 'Flutter Speed Dial Examples'));
+  runApp(MaterialApp(home: MyApp(),
+      locale: Locale('en'),supportedLocales: [ Locale('en')],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ]
+      , title: 'Flutter Speed Dial Examples'));
 }
 
 class MyApp extends StatefulWidget {
